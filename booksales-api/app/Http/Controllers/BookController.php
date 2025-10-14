@@ -6,14 +6,9 @@ use App\Models\Book;
 
 class BookController extends Controller
 {
-    public function index() {
-        $books = [
-            ['title' => 'Laravel Basics', 'author' => 'Taylor Otwell'],
-            ['title' => 'Mastering PHP', 'author' => 'John Doe'],
-            ['title' => 'Web Development 101', 'author' => 'Jane Smith']
-        ];
-
+    public function index()
+    {
+        $books = Book::with('author')->get();
         return view('books', compact('books'));
     }
 }
-

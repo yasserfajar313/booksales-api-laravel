@@ -8,7 +8,7 @@ class GenreController extends Controller
 {
     public function index()
     {
-        $genres = Genre::getAll();
-        return view('genre', compact('genres'));
+        $genres = Genre::all();
+        return view('genres', compact('genres'));
     }
 }
