@@ -9,7 +9,8 @@ class Book extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'author_id', 'genre_id'];
+    // Kolom yang boleh diisi
+    protected $fillable = ['title', 'author_id', 'genre_id', 'year'];
 
     // Relasi ke Author
     public function author()
