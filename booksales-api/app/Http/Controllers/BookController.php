@@ -7,11 +7,10 @@ use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
-    // Menampilkan semua data buku
+    // READ ALL
     public function index()
     {
         $books = Book::with(['author', 'genre'])->get();
-
         return response()->json([
             'status' => 'success',
             'message' => 'Data buku berhasil diambil',
@@ -19,10 +18,9 @@ class BookController extends Controller
         ], 200);
     }
 
-    //  Menambahkan data buku baru
+    // CREATE
     public function store(Request $request)
     {
-        // Validasi input
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'author_id' => 'required|exists:authors,id',
@@ -30,14 +28,75 @@ class BookController extends Controller
             'year' => 'required|integer|min:1000|max:' . date('Y')
         ]);
 
-        // Simpan ke database
         $book = Book::create($validated);
 
-        // Kembalikan response JSON
         return response()->json([
             'status' => 'success',
             'message' => 'Data buku berhasil ditambahkan',
             'data' => $book
         ], 201);
+    }
+
+    // SHOW
+    public function show($id)
+    {
+        $book = Book::with(['author', 'genre'])->find($id);
+        if (!$book) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Buku tidak ditemukan'
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $book
+        ], 200);
+    }
+
+    // UPDATE
+    public function update(Request $request, $id)
+    {
+        $book = Book::find($id);
+        if (!$book) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Buku tidak ditemukan'
+            ], 404);
+        }
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'author_id' => 'required|exists:authors,id',
+            'genre_id' => 'required|exists:genres,id',
+            'year' => 'required|integer|min:1000|max:' . date('Y')
+        ]);
+
+        $book->update($validated);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data buku berhasil diperbarui',
+            'data' => $book
+        ], 200);
+    }
+
+    // DESTROY
+    public function destroy($id)
+    {
+        $book = Book::find($id);
+        if (!$book) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Buku tidak ditemukan'
+            ], 404);
+        }
+
+        $book->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data buku berhasil dihapus'
+        ], 200);
     }
 }

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class GenreController extends Controller
 {
-    // READ
+    // READ ALL
     public function index()
     {
         return response()->json([
@@ -30,5 +30,65 @@ class GenreController extends Controller
             'message' => 'Genre berhasil ditambahkan',
             'data' => $genre
         ], 201);
+    }
+
+    // SHOW
+    public function show($id)
+    {
+        $genre = Genre::find($id);
+        if (!$genre) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Genre tidak ditemukan'
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $genre
+        ], 200);
+    }
+
+    // UPDATE
+    public function update(Request $request, $id)
+    {
+        $genre = Genre::find($id);
+        if (!$genre) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Genre tidak ditemukan'
+            ], 404);
+        }
+
+        $validated = $request->validate([
+            'genre_name' => 'required|string|max:100'
+        ]);
+
+        $genre->update($validated);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Genre berhasil diperbarui',
+            'data' => $genre
+        ], 200);
+    }
+
+    // DESTROY
+    public function destroy($id)
+    {
+        $genre = Genre::find($id);
+        if (!$genre) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Genre tidak ditemukan'
+            ], 404);
+        }
+
+        $genre->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Genre berhasil dihapus'
+        ], 200);
     }
 }
