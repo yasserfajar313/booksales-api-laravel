@@ -20,7 +20,7 @@ class GenreController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'genre_name' => 'required|string|max:100'
+            'name' => 'required|string|max:100'
         ]);
 
         $genre = Genre::create($validated);
@@ -61,7 +61,7 @@ class GenreController extends Controller
         }
 
         $validated = $request->validate([
-            'genre_name' => 'required|string|max:100'
+            'name' => 'required|string|max:100'
         ]);
 
         $genre->update($validated);
