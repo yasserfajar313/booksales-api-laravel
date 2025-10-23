@@ -48,4 +48,10 @@ class User extends Authenticatable implements JWTSubject // 🟩 implement inter
     {
         return [];
     }
+
+    public function transactions()
+{
+    return $this->hasMany(Transaction::class);
+}
+
 }
