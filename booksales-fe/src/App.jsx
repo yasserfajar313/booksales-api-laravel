@@ -15,17 +15,23 @@ import Register from "./pages/auth/register";
 // Admin pages
 import Dashboard from "./pages/admin";
 
-// Admin — Books
+// Books
 import AdminBooks from "./pages/admin/books";
 import CreateBook from "./pages/admin/books/create";
 
-// Admin — Genres
+// Genres
 import AdminGenres from "./pages/admin/genres";
 import CreateGenre from "./pages/admin/genres/create";
+import EditGenre from "./pages/admin/genres/edit";
 
-// Admin — Authors
+// Authors
 import AdminAuthors from "./pages/admin/authors";
 import CreateAuthor from "./pages/admin/authors/create";
+import EditAuthor from "./pages/admin/authors/edit";
+
+// Access Control
+import ProtectedRoute from "./components/ProtectedRoute";
+import Unauthorized from "./pages/Unauthorized";
 
 function App() {
   return (
@@ -42,8 +48,18 @@ function App() {
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
 
-        {/* ADMIN */}
-        <Route path="admin" element={<AdminLayout />}>
+        {/* UNAUTHORIZED PAGE */}
+        <Route path="unauthorized" element={<Unauthorized />} />
+
+        {/* ADMIN — PROTECTED ROUTE */}
+        <Route
+          path="admin"
+          element={
+            <ProtectedRoute role="admin">
+              <AdminLayout />
+            </ProtectedRoute>
+          }
+        >
 
           {/* Dashboard */}
           <Route index element={<Dashboard />} />
@@ -58,14 +74,15 @@ function App() {
           <Route path="genres">
             <Route index element={<AdminGenres />} />
             <Route path="create" element={<CreateGenre />} />
+            <Route path=":id/edit" element={<EditGenre />} />
           </Route>
 
           {/* Authors */}
           <Route path="authors">
             <Route index element={<AdminAuthors />} />
             <Route path="create" element={<CreateAuthor />} />
+            <Route path=":id/edit" element={<EditAuthor />} />
           </Route>
-
         </Route>
 
       </Routes>
